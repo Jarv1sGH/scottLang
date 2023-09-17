@@ -5,7 +5,7 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant="h4" mr={"auto"} textTransform={"uppercase"}>
+        <Typography variant={"h5"} mr={"auto"} textTransform={"uppercase"}>
           ScottLang
         </Typography>
         <Link
