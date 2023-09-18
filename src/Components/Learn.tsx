@@ -66,7 +66,7 @@ const Learn = () => {
             : nextQuesHandler
         }
       >
-        {count === 8 ? "Take test" : "Next"}
+        {count === 7 ? "Take test" : "Next"}
       </Button>
     </Container>
   );
