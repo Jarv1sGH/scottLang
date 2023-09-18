@@ -15,3 +15,9 @@ type StateType = {
     error?: string,
     words: WordType[]
 }
+
+type TranslationType = {
+    translations: {
+        text: string
+    }[]
+}

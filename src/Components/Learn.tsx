@@ -1,7 +1,11 @@
 import { Container, Button, Typography, Stack } from "@mui/material";
 import { ArrowBack, VolumeUp } from "@mui/icons-material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { fetchTranslation } from "../utils/apiCall";
+import { useDispatch, useSelector } from "react-redux";
+import { getWordsReq, getWordsSuccess, getWordsFail } from "../Redux/slices";
+import Loader from "./Loader";
 
 const Learn = () => {
   const [count, setCount] = useState<number>(0);
@@ -9,11 +13,28 @@ const Learn = () => {
   const params = useSearchParams()[0].get("language") as LangType;
 
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { loading, words, error } = useSelector(
+    (state: { root: StateType }) => state.root
+  );
 
   const nextQuesHandler = (): void => {
     setCount((prev) => prev + 1);
   };
 
+  useEffect(() => {
+    dispatch(getWordsReq());
+    fetchTranslation(params || "fr")
+      .then((arr: WordType[]) => {
+        dispatch(getWordsSuccess(arr));
+      })
+      .catch((err) => {
+        dispatch(getWordsFail(err));
+      });
+  }, []);
+
+  if (loading) return <Loader />;
   return (
     <Container
       maxWidth="sm"
@@ -38,10 +59,10 @@ const Learn = () => {
       <Typography m={"2rem 0"}>ScottLang your langauage partner</Typography>
       <Stack direction={"row"} spacing={"1rem"}>
         <Typography variant="h4">
-          {count + 1} - {"Sample"}
+          {count + 1} - {words[count]?.word}
         </Typography>
         <Typography color="lightGreen" variant="h4">
-          : {"Sample"}
+          : {words[count]?.meaning}
         </Typography>
 
         <Button
