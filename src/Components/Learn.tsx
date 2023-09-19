@@ -4,9 +4,13 @@ import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { fetchTranslation } from "../utils/apiCall";
 import { useDispatch, useSelector } from "react-redux";
-import { getWordsReq, getWordsSuccess, getWordsFail } from "../Redux/slices";
+import {
+  getWordsReq,
+  getWordsSuccess,
+  getWordsFail,
+  clearState,
+} from "../Redux/slices";
 import Loader from "./Loader";
-
 const Learn = () => {
   const [count, setCount] = useState<number>(0);
   // LangType is defined in vite-env.tds
@@ -32,6 +36,10 @@ const Learn = () => {
       .catch((err) => {
         dispatch(getWordsFail(err));
       });
+    if (error) {
+      alert("error occured");
+      dispatch(clearState());
+    }
   }, []);
 
   if (loading) return <Loader />;
@@ -80,14 +88,14 @@ const Learn = () => {
         variant="contained"
         fullWidth
         onClick={
-          count === 7
+          count === words.length - 1
             ? () => {
                 navigate("/quiz");
               }
             : nextQuesHandler
         }
       >
-        {count === 7 ? "Take test" : "Next"}
+        {count === words.length - 1 ? "Take test" : "Next"}
       </Button>
     </Container>
   );
