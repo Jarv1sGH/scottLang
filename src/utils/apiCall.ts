@@ -1,7 +1,7 @@
+const apiKey = import.meta.env.VITE_API_KEY;
 import axios from "axios";
 import { generate } from "random-words";
 import _ from "lodash"
-
 const generateWords = (translatedWords: {
     Text: string
 }[], index: number): string[] => {
@@ -32,7 +32,7 @@ export const fetchTranslation = async (langCode: LangType): Promise<WordType[]> 
             },
             headers: {
                 'content-type': 'application/json',
-                'X-RapidAPI-Key': '6f7ee6a8f8msh48e7038f8199655p1a3346jsnef0abd6472c9',
+                'X-RapidAPI-Key': apiKey,
                 'X-RapidAPI-Host': 'microsoft-translator-text.p.rapidapi.com'
             },
         };
