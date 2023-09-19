@@ -62,3 +62,15 @@ export const fetchTranslation = async (langCode: LangType): Promise<WordType[]> 
 
     }
 }
+
+
+export const resultCalculator = (arr1: string[], arr2: string[]): number => {
+    if (arr1.length !== arr2.length) throw new Error("Arrays length do not match");
+
+    let matchingAnswers = 0;
+    for (let index = 0; index < arr1.length; index++) {
+        if (arr1[index] === arr2[index]) matchingAnswers++;
+    }
+
+    return matchingAnswers;
+}
