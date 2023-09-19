@@ -1,8 +1,8 @@
 import { Container, Button, Typography, Stack } from "@mui/material";
 import { ArrowBack, VolumeUp } from "@mui/icons-material";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { fetchTranslation } from "../utils/apiCall";
+import { fetchTextToSpeech, fetchTranslation } from "../utils/apiCall";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getWordsReq,
@@ -13,6 +13,7 @@ import {
 import Loader from "./Loader";
 const Learn = () => {
   const [count, setCount] = useState<number>(0);
+  const [audioSrc, setAudioSrc] = useState<string>("");
   // LangType is defined in vite-env.tds
   const params = useSearchParams()[0].get("language") as LangType;
 
@@ -23,7 +24,19 @@ const Learn = () => {
     (state: { root: StateType }) => state.root
   );
 
+  const audioRef = useRef(null);
+  const textToSpeech = async () => {
+    const player: HTMLAudioElement = audioRef.current!;
+
+    if (player) {
+      player.play();
+    } else {
+      const data = await fetchTextToSpeech(words[count]?.word, params);
+      setAudioSrc(data);
+    }
+  };
   const nextQuesHandler = (): void => {
+    setAudioSrc("");
     setCount((prev) => prev + 1);
   };
 
@@ -50,6 +63,7 @@ const Learn = () => {
         padding: "1rem",
       }}
     >
+      {audioSrc && <audio src={audioSrc} autoPlay ref={audioRef}></audio>}
       <Button
         onClick={
           count === 0
@@ -74,6 +88,7 @@ const Learn = () => {
         </Typography>
 
         <Button
+          onClick={textToSpeech}
           sx={{
             borderRadius: "50%",
           }}

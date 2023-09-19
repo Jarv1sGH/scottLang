@@ -5,14 +5,13 @@ const Header = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        <Typography variant={"h5"} mr={"auto"} textTransform={"uppercase"}>
-          ScottLang
-        </Typography>
         <Link
           style={{ color: "White", margin: "0.5rem", textDecoration: "none" }}
           to={"/"}
         >
-          Home
+          <Typography variant={"h5"} mr={"auto"} textTransform={"uppercase"}>
+            ScottLang
+          </Typography>
         </Link>
       </Toolbar>
     </AppBar>

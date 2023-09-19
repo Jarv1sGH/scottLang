@@ -1,4 +1,5 @@
 const apiKey = import.meta.env.VITE_API_KEY;
+const voiceRssApiKey = import.meta.env.VITE_VOICE_API_KEY;
 import axios from "axios";
 import { generate } from "random-words";
 import _ from "lodash"
@@ -73,4 +74,38 @@ export const resultCalculator = (arr1: string[], arr2: string[]): number => {
     }
 
     return matchingAnswers;
+}
+
+
+// text to speech api call
+
+export const fetchTextToSpeech = async (text: string, language: LangType): Promise<string> => {
+
+    const encodedParams = new URLSearchParams({
+        src: text,
+        r: "0",
+        c: "mp3",
+        f: '8khz_8bit_mono',
+        b64:"true"
+
+    });
+
+    if (language === "ja") encodedParams.set("hl", "ja-jp")
+    else if (language === "es") encodedParams.set("hl", "es-es")
+    else if (language === "fr") encodedParams.set("hl", "fr-fr")
+    else encodedParams.set("hl", "hi-in")
+
+
+    const options = {
+        params: { key: voiceRssApiKey },
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'X-RapidAPI-Key': apiKey,
+            'X-RapidAPI-Host': 'voicerss-text-to-speech.p.rapidapi.com'
+        }
+    };
+    const { data }: { data: string } = await axios.post(`https://voicerss-text-to-speech.p.rapidapi.com/`, encodedParams, options);
+
+    return data;
+
 }
